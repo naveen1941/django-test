@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div align="center">
+    <p class="btn btn-primary btn-lg addMarginBottom" align="center">Pictures of {{ user_to_show.username }}</p>
+    </div>
+    <ol id="photoListView">
+        {% if photos|length >= 1 %}
+            {% for photo in photos %}
+                <li>
+                    <div id="photoDiv">
+                        <div align="center" class="panel panel-primary addpaddingbottom">
+                            <a href="../../photo/{{ photo.id }} ">{{ photo.title }} </a>
+                        </div>
+                        <div align="center" class="addPaddingBottom imageThubmnail" >
+                            {% if photo.thumbnail %}
+                                <a href="../../photo/{{ photo.id }} "><img src="../../static/{{ photo.thumbnail }}"/> </a>
+                            {% endif %}
+                        </div>
+                        <div align="center" class="panel panel-success">
+                            <p class="">{{ photo.category.category }}</p>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        {% else %}
+            <div aligh="center">
+                <h3>No uploaded Photos</h3>
+            </div>
+        {% endif %}
+    </ol>
+{% endblock %}

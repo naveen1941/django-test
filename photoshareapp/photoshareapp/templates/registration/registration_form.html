@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="middleForm">
+        <h2>New User?</h2>
+    </div>
+
+    {% if form.errors %}
+        <div class="middleForm">
+            <p>Invalid data. Please try again.</p>
+        </div>
+    {% endif %}
+    <form method="post" action="">
+      {% csrf_token %}
+        <div class="middleForm">
+            {{ form.as_p }}
+            <input type="submit" value="Register" />
+        </div>
+    </form>
+{% endblock %}

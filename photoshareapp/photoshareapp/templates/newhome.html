@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="middleHome">
+        <ol>
+        {% for u in users %}
+            {% if user != u %}
+                <li class="addPaddingBottom">
+                    <img  width='32px' src='../static/user_unknown.png'/>
+                    <a href="../users/{{ u.id }} ">{{ u.username }} </a>
+                    <b>{{ u.public_photo_count }} Public Shared Photos</b>
+                    {% if user.is_authenticated %}
+                        <b>{{ u.community_photo_count }} Community Shared Photos</b>
+                    {% endif %}
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ol>
+    </div>
+
+{% endblock %}

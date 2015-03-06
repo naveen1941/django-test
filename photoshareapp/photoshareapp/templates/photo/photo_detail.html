@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block extrahead %}
+    {{ block.super }}
+    {% include "comments/_ajax_comments.html" %}
+{% endblock %}
+
+{% block content %}
+    {% if photo.submitter == user %}
+        <a href="{% url 'photo_edit' pk=photo.pk%}">Edit</a>
+        <a href="{% url 'photo_delete' pk=photo.pk%}">Delete</a>
+    {% endif %}
+    <div align="center">
+        <p class="btn btn-primary btn-lg addMarginBottom" align="center">{{ photo.title }}</p>
+    </div>
+    <div align="center" >
+            <h3 class="panel-title">Submitted by {{ photo.uploaded }}</h3>
+            <p> <b>Description: </b>{{ photo.description }}</p>
+
+    </div>
+    <div align="center" id="imageDetailView">
+        <img src="../../static/{{ photo.image }}"/>
+    </div>
+
+
+    <h4 id="commentsHead">Comments:</h4>
+    {% load comments %}
+    {% load mptt_tags %}
+    {% get_comment_list for photo as comments %}
+        {% if comments %}
+            <ul id="commentsList">
+            {% recursetree comments %}
+
+                <div {% if request.REQUEST.c|add:"0" == node.id %}id="newly_posted_comment"{% endif %}>
+                    <div class="comment" {% if node.level > 0 %} style="margin-left: 35px" {% else %} style="margin-left: 0px" {% endif %}>
+                        <img width="32px" src="../../static/user_unknown.png"/>
+                        <a href="../../users/{{ node.user.id }}"> {{ node.user }}:</a>
+                            {{ node.comment }}
+                        <div class="timeLabel">
+
+                            {{ node.submit_date|timesince }} ago
+                            {% if node.level < 1 %} <div class="replyButton" id="#comment-form-{{ node.id }}"><a>Reply</a></div> {% endif %}
+
+                        </div>
+                    </div>
+                        {% if node.level < 1 %} {% render_comment_form for photo %} {% endif %}
+                        {% if not node.is_leaf_node %}
+                            {{ children }}
+                        {% endif %}
+                </div>
+
+            {% endrecursetree %}
+            </ul>
+        {% endif %}
+    <h4>Add your comments:</h4>
+    {% render_comment_form for photo %}
+{% endblock %}
+

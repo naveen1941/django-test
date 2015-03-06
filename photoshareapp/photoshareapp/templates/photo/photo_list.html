@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    </p>
+    <ol>
+        {% for photo in object_list %}
+        <li>
+            <a href="photo/{{ photo.id }}"><h3>Taken By: {{ photo.uploaded }}</h3></a>
+            <img src="static/{{ photo.image }}"/>
+        </li>
+        {% endfor %}
+    </ol>
+{% endblock %}

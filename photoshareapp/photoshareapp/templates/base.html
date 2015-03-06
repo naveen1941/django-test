@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">
+    <link rel="stylesheet" href="{% static "css/mystyles.css" %}">
+    <script src={% static "script/jquery.min.js"%}></script>
+    <script src={% static "script/bootstrap.min.js"%}></script>
+    <script>
+(function( $ ){
+$.fn.bindPostCommentHandler = function() {
+    this.each(function() {
+        $(this).submit(function() {
+            commentform = this;
+            commentwrap = $(this).parent();
+            $.ajax({
+                type: "POST",
+                data: $(commentform).serialize(),
+                url: "../../photo/commentsapp/post/",
+                cache: false,
+                dataType: "html",
+                success: function(html, textStatus) {
+                    {% if user.username %}
+                        form_id=$(commentform).attr('id');
+                        htmlChunk=
+                            '<img width="32px" src="../../static/user_unknown.png"/>'+' <a href="../../users/{{ user.id }}"> {{ user.username }}:</a>'+
+                            $(commentform).find('textarea[name="comment"]').val()+
+                            '<div class="timeLabel">Just Now </div>'
+                        $(commentform).find('textarea[name="comment"]').val('')
+                        if(form_id.slice(-1)=='-'){
+                            if($("#commentsList").length) {
+                                console.log('not first comment')
+                                $("#commentsList").append(htmlChunk+'<div ><a href="">Reply</a></div>')
+                            }
+                            else{
+                                 console.log('FIRST COMMENT')
+                                htmlChunk='<ul id="commentsList"><div>'+htmlChunk+' <div ><a href="">Reply</a></div></div></ul>'
+                                $('#commentsHead').after(htmlChunk)
+                            }
+                        }
+                        else{
+                            htmlChunk='<div style="margin-left: 35px">'+htmlChunk+' </div>';
+                            $(commentform).parent().after(htmlChunk)
+                        }
+                    {% else %}
+                        alert('Please login to commment')
+                        window.location={% url 'login' %}
+                    {% endif %}
+
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    $(commentform).replaceWith('Your comment was unable to be posted at this time.  We apologise for the inconvenience.');
+                }
+            });
+            return false;
+        });
+    }); //each
+};
+})( jQuery );
+
+$(function() {
+    $('.comment-form form').bindPostCommentHandler();
+});
+
+$(document).ready(function(){
+    $(".replyButton").click(function(){
+        form_id=$(this).attr('id')
+        $(form_id).slideToggle()
+    });
+});
+
+    </script>
+    <title></title>
+</head>
+<body>
+
+<div class="container">
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="{% url 'home' %}">
+            Photo Share
+          </a>
+
+          <p class="navbar-text navbar-right">
+              {% if user.is_authenticated %}
+                  <a href="{% url 'user_detail' user.id %}">Hello {{ user.username }}</a> |
+                  <a href="{% url 'home' %}">Home </a> |
+                  <a href="{% url 'photo_create' %}">Submit Photo</a> |
+                  <a href="{% url 'logout' %}">Logout</a>
+              {% else %}
+                  <a href="{% url 'home' %}">Home </a> |
+                  <a href="{% url 'login' %}">Login</a> |
+                  <a href="/accounts/register/">New User?</a>
+              {% endif %}
+          </p>
+        </div>
+      </div>
+    </nav>
+    {% block content %}
+
+    {% endblock %}
+</div>
+</body>
+</html>
+
+
+
