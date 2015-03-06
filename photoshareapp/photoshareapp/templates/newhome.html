@@ -10,7 +10,9 @@
                     <a href="../users/{{ u.id }} ">{{ u.username }} </a>
                     <b>{{ u.public_photo_count }} Public Shared Photos</b>
                     {% if user.is_authenticated %}
+                        <div>
                         <b>{{ u.community_photo_count }} Community Shared Photos</b>
+                        </div>
                     {% endif %}
                 </li>
             {% endif %}

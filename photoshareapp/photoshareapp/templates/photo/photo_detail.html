@@ -29,7 +29,6 @@
         {% if comments %}
             <ul id="commentsList">
             {% recursetree comments %}
-
                 <div {% if request.REQUEST.c|add:"0" == node.id %}id="newly_posted_comment"{% endif %}>
                     <div class="comment" {% if node.level > 0 %} style="margin-left: 35px" {% else %} style="margin-left: 0px" {% endif %}>
                         <img width="32px" src="../../static/user_unknown.png"/>

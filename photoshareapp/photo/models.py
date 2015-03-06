@@ -79,7 +79,9 @@ class Photo(models.Model):
          from django.core.files import File
          reopen = open(temp_handle, "rb")
          django_file = File(reopen)
+         
          self.thumbnail.save(temp_handle,django_file, save=False)
+
 
     def save(self):
          self.create_thumbnail()

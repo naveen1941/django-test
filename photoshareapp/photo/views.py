@@ -7,7 +7,7 @@ from .forms import PhotoForm
 import re
 
 
-def error404(request):
+def error404_view(request):
     print ('Naveen')
     return render(request, '404.html')
 

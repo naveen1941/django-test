@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required as auth
 from django.conf.urls import handler404
 
-from photo.views import  PhotoCreateView, PhotoDetail, UserDetail, HomePageView, error404
+from photo.views import  PhotoCreateView, PhotoDetail, UserDetail, HomePageView, error404_view
 from django.contrib.auth.decorators import login_required as auth
 
 
@@ -22,4 +22,4 @@ urlpatterns = patterns('',
     url(r'^users/(?P<pk>\w+)/$',  UserDetail,name='user_detail_name'),
     url(r'^users/(?P<pk>\d+)/$', UserDetail,name='user_detail'),
 )
-handler404 = error404
+handler404 = error404_view
