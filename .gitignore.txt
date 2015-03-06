@@ -2,6 +2,7 @@
 *.pyo
 build/
 dist/
+uploaded_files/
 .installed.cfg
 bin
 develop-eggs
